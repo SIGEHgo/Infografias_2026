@@ -1,0 +1,182 @@
+#################
+### Municipal ###
+#################
+
+
+archivos = list.files(path = "Inputs/Canva/Municipal/", full.names = T)
+
+for (i in 1:4) {
+  cat("Vamos imprimir el lote", i, "\n")
+  pag = archivos[grepl(paste0("P", i, "\\.pdf$"), archivos)] 
+  pdftools::pdf_combine(input = pag, output = paste0("Inputs/Canva/Municipal/Infografia_Municipal_P", i, ".pdf"))
+  cat(pag, "\n")
+}
+
+
+
+
+#### Juntar
+archivos = list.files(path = "Inputs/Canva/Municipal/", full.names = T)
+archivos = archivos[!grepl("Lote", archivos)]
+archivos
+
+
+datos = "Output/Infografias Base Enero 2026.xlsx" |>  readxl::read_excel(sheet = 1)
+datos = datos |> 
+  dplyr::select(CVE_MUN,Municipio) |> 
+  dplyr::mutate(
+    Nombre = Municipio
+    ) 
+
+for (j in seq_along(datos$Nombre)) {
+  
+  cat("Vamos en ", datos$Nombre[j], "\n")
+  
+  paginas = lapply(seq_along(archivos), FUN = function(i) {
+  temporal = tempfile(fileext = ".pdf")
+  pdftools::pdf_subset(
+    input = archivos[i],
+    pages = j,
+    output = temporal
+  )
+  
+  return(temporal)
+  })
+  
+  pdftools::pdf_combine(
+    input = paginas,
+    output = paste0("Output/Infografias/Municipal/Infografía Municipal ", datos$Nombre[j], ".pdf")
+  )
+
+}
+
+
+
+
+
+
+
+
+################
+### Regional ###
+################
+
+archivos = list.files(path = "Inputs/Canva/Regional/", full.names = T)
+
+
+datos = "Output/Infografias Base Enero 2026.xlsx" |>  readxl::read_excel(sheet = 2)
+
+
+for (j in seq_along(datos$Región)) {
+  
+  cat("Vamos en ", datos$Región[j], "\n")
+  
+  paginas = lapply(seq_along(archivos), FUN = function(i) {
+    temporal = tempfile(fileext = ".pdf")
+    pdftools::pdf_subset(
+      input = archivos[i],
+      pages = j,
+      output = temporal
+    )
+    
+    return(temporal)
+  })
+  
+  pdftools::pdf_combine(
+    input = paginas,
+    output = paste0("Output/Infografias/Regional/", datos$Región[j], ".pdf")
+  )
+  
+}
+
+
+### Colocar portadas
+
+archivos = list.files(path = "Output/Infografias/Regional/", full.names = T)
+
+for (i in seq_along(archivos)) {
+  temporal = tempfile(fileext = ".pdf")
+  pdftools::pdf_subset(
+    input = "Inputs/Portadas/Portadas Regionales.pdf",
+    pages = i,
+    output = temporal
+  )
+  
+  pdftools::pdf_combine(
+    input = c(temporal, archivos[i]),
+    output = paste0("../../../../", basename(archivos[i]))
+  )
+}
+
+
+
+
+##########################
+### Zona Metropolitana ###
+##########################
+
+
+archivos = list.files(path = "Inputs/Canva/Zona Metropolitana/", full.names = T)
+
+
+datos = "Output/Infografias Base Enero 2026.xlsx" |>  readxl::read_excel(sheet = 3)
+
+
+for (j in seq_along(datos$`Zona Metropolitana`)) {
+  
+  cat("Vamos en ", datos$`Zona Metropolitana`[j], "\n")
+  
+  paginas = lapply(seq_along(archivos), FUN = function(i) {
+    temporal = tempfile(fileext = ".pdf")
+    pdftools::pdf_subset(
+      input = archivos[i],
+      pages = j,
+      output = temporal
+    )
+    
+    return(temporal)
+  })
+  
+  pdftools::pdf_combine(
+    input = paginas,
+    output = paste0("Output/Infografias/Zona Metropolitana/", datos$`Zona Metropolitana`[j], ".pdf")
+  )
+  
+}
+
+
+
+
+### Colocar portadas
+
+
+archivos = list.files(path = "Output/Infografias/Zona Metropolitana/", full.names = T)
+
+for (i in seq_along(archivos)) {
+  temporal = tempfile(fileext = ".pdf")
+  pdftools::pdf_subset(
+    input = "Inputs/Portadas/Portadas Zonas Metropolitanas.pdf",
+    pages = i,
+    output = temporal
+  )
+  
+  pdftools::pdf_combine(
+    input = c(temporal, archivos[i]),
+    output = paste0("../../../../", basename(archivos[i]))
+  )
+}
+
+
+
+
+
+###############
+### Estatal ###
+###############
+
+archivos = list.files(path = "Inputs/Canva/Estatal/", full.names = T)
+
+pdftools::pdf_combine(
+  input = archivos,
+  output = paste0("Output/Infografias/Estatal/Estatal.pdf")
+)
