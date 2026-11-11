@@ -18,3 +18,7 @@
 .Renviron.*.local
 .Rprofile
 .Rprofile.local
+
+
+# Lo que se ignorara dentro del documento
+descargas_mapbiomas/
