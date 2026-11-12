@@ -79,9 +79,26 @@ guardar = guardar |>
     CVEGEO = CVEGEO |>  as.character()
   )
 
+guardar = guardar |> 
+  dplyr::select(
+    CVEGEO, MUNICIPIO, Año, Total, pixelValue, value, id_mapbiomas
+  ) |> 
+  dplyr::rename(
+    Clase_id = pixelValue
+  )
+
+
 
 guardar |>  jsonlite::write_json(
   "descargas_mapbiomas/datos_hidalgo.json", 
   pretty = T, 
   auto_unbox = T
   )
+
+
+
+
+
+
+
+
