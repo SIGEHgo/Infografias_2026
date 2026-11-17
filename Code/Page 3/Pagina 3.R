@@ -97,4 +97,30 @@ secretariado = secretariado |>
 
 
 
+#### Personal de seguridad activo ####}
+
+personal_seguridad = "Inputs/Page 3/Personal de seguridad activo/conjunto_de_datos_rec_huma_sp_cngmd2025_csv/conjunto_de_datos/m3s1p33_cngmd2025.csv" |> 
+  read.csv()
+
+personal_seguridad = personal_seguridad |> 
+  dplyr::filter(cve_ent == 13) |> 
+  dplyr::group_by(cvegeo) |> 
+  dplyr::summarise(
+    `Personal de seguridad` = sexostt |> as.numeric() |>  sum(na.rm = T),
+    `Personal de seguridad Hombres` = sexos1 |>  as.numeric() |>  sum(na.rm = T),
+    `Personal de seguridad Mujeres` = sexos2 |>  as.numeric() |>  sum(na.rm = T),
+    
+  )
+
+personal_seguridad = personal_seguridad |> 
+  dplyr::rename(CVEGEO = cvegeo)
+
+personal_seguridad = personal_seguridad |> 
+  dplyr::mutate(CVEGEO = CVEGEO |> as.numeric()) |> 
+  dplyr::arrange(CVEGEO) |> 
+  dplyr::mutate(CVEGEO = CVEGEO |>  as.character())
+
+
+
+
 

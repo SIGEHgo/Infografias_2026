@@ -1,0 +1,8 @@
+COLUMNA,DESCRIPCION,ORIGEN,TIPO_DATO,LONGITUD,CODIGO_VALIDO
+cvegeo,Clave geoestadística concatenada,SECC I. 33,Carácter,5,01001 al 32058
+cve_ent,Clave del AGEE,SECC I. 33,Carácter,2,01 al 99
+cve_mun,Clave del AGEM,SECC I. 33,Carácter,3,001 al 999
+funcsepu_a,Función policial,SECC I. 33,Numérico,1,1 al 9
+sexostt,Total,SECC I. 33,Carácter,20,"0-999999999999999, NA, NSS, ND, NP, NULL"
+sexos1,Hombres,SECC I. 33,Carácter,20,"0-999999999999999, NA, NSS, ND, NP, NULL"
+sexos2,Mujeres,SECC I. 33,Carácter,20,"0-999999999999999, NA, NSS, ND, NP, NULL"

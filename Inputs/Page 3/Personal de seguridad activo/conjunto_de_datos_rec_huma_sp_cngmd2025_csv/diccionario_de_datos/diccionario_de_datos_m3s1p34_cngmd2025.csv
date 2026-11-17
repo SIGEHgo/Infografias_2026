@@ -1,0 +1,9 @@
+COLUMNA,DESCRIPCION,ORIGEN,TIPO_DATO,LONGITUD,CODIGO_VALIDO
+cvegeo,Clave geoestadística concatenada,SECC I. 34,Carácter,5,01001 al 32058
+cve_ent,Clave del AGEE,SECC I. 34,Carácter,2,01 al 99
+cve_mun,Clave del AGEM,SECC I. 34,Carácter,3,001 al 999
+rnsnni1,Existencia de binomios caninos,SECC I. 34,Numérico,2,0 al 98
+sexostt,Personal adscrito a la institución encargada de la función de seguridad pública que formaba parte de un binomio canino - Total,SECC I. 34,Carácter,20,"0-999999999999999, NA, NSS, ND, NP, NULL"
+sexos1,Personal adscrito a la institución encargada de la función de seguridad pública que formaba parte de un binomio canino - Hombres,SECC I. 34,Carácter,20,"0-999999999999999, NA, NSS, ND, NP, NULL"
+sexos2,Personal adscrito a la institución encargada de la función de seguridad pública que formaba parte de un binomio canino - Mujeres,SECC I. 34,Carácter,20,"0-999999999999999, NA, NSS, ND, NP, NULL"
+totalca1,Perros,SECC I. 34,Carácter,20,"0-999999999999999, NA, NSS, ND, NP, NULL"

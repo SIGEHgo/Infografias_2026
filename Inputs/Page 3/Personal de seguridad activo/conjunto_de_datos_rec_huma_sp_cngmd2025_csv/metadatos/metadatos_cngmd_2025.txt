@@ -1,0 +1,53 @@
+Identifier: MEX-INEGI.40.1200.03-CNGMD-2025
+
+Title: Censo Nacional de Gobiernos Municipales y Demarcaciones Territoriales de la Ciudad de México (CNGMD) 2025 
+
+Description: INEGI. Censo Nacional de Gobiernos Municipales y Demarcaciones Territoriales de la Ciudad de México (CNGMD) 2025 
+
+Tiene como objetivo generar información estadística y geográfica sobre la integración y el funcionamiento de los ayuntamientos y alcaldías, así como de la gestión y el desempeño de las instituciones que integran a la Administración Pública de cada municipio o demarcación territorial, específicamente en las funciones de gobierno, seguridad pública, protección civil, justicia cívica, agua potable y saneamiento, y residuos sólidos urbanos. Su finalidad es vincular los datos con el diseño, implementación, monitoreo y evaluación de las políticas públicas de alcance nacional en dichas funciones.
+
+El CNGMD 2025 presenta datos e información sobre: 
+
+1. La integración del Ayuntamiento y del Concejo de la Alcaldía de cada municipio y demarcación territorial, respectivamente; los recursos humanos, materiales y presupuestales de los que disponen sus personas integrantes, así como de las comisiones y actividades realizadas por dichos órganos colegiados.
+
+2. La estructura organizacional de la Administración Pública de cada municipio o demarcación territorial, así como de la infraestructura, los recursos humanos, materiales y presupuestales de los que disponen las instituciones que la integran, además del ejercicio de las funciones de gobierno realizadas por estas.
+
+3. Los servicios públicos prestados por cada municipio o demarcación territorial.
+
+4. La función catastral y cobro del impuesto predial en la Administración Pública de cada municipio, que permita apoyar la toma de decisiones enfocadas en las políticas públicas concernientes a los temas de tenencia de la tierra y uso de la información catastral con fines multifinalitarios.
+
+5. La planificación urbana y rural en el municipio o demarcación territorial, que incluya la identificación de áreas de riesgo, zonas de expansión y propiedades sin registro formal, con el propósito de fomentar la regularización y fortalecer la seguridad jurídica de las personas propietarias.
+
+6. La situación normativa y operativa de la función de seguridad pública de cada municipio, así como de la infraestructura, los recursos humanos, presupuestales y materiales de los que dispone, de ser el caso, la institución encargada de la función de seguridad pública; además del ejercicio de la función realizada por esta.
+
+7. La situación normativa y operativa de la función de protección civil de cada municipio o demarcación territorial, del marco normativo y programático en la materia, así como de la estructura organizacional, la capacidad operativa, los recursos humanos y presupuestales de los que dispone, de ser el caso, la Unidad Municipal de Protección Civil u homóloga; además del ejercicio de la función realizada por esta o, en su defecto, por las autoridades o instituciones encargadas de dicha función.
+
+8. La situación normativa y operativa de la función de justicia cívica de cada municipio, así como de la infraestructura, la capacidad instalada, los recursos humanos y presupuestales de los que disponen, de ser el caso, los juzgados cívicos; además del ejercicio de la función realizada por estos o, en su defecto, por las autoridades o instituciones encargadas de dicha función.
+
+9. La gestión, administración, características técnicas y ambientales de la prestación de los servicios municipales de agua potable y saneamiento desde la perspectiva de las estadísticas ambientales, para satisfacer la demanda de información básica sobre un recurso insustituible y estratégico para la población, los ecosistemas y el desarrollo sustentable del país.
+
+10. La producción, manejo, recolección y disposición de los residuos con características domiciliarias generados en las casas habitación y en cualquier otra actividad dentro de establecimientos o en la vía pública, cuya responsabilidad en términos de su manejo recae en la administración municipal o de las demarcaciones territoriales, asimismo, generar datos sobre la georreferenciación de los prestadores de los servicios, estaciones de transferencia, plantas de tratamiento y los sitios de disposición final de residuos sólidos.
+
+Note: Para georreferenciación de los datos de coordenadas geográficas se utiliza el Sistema de Referencia de Coordenadas (SCR) WGS84 (World Geodetic System 1984), cuyo formato consiste en la representación con dos cifras de latitud y longitud, en positivo para Norte y Este, y negativo para Sur y Oeste.
+
+Modified: 2026-06-30
+
+Publisher: Instituto Nacional de Estadística y Geografía, INEGI
+
+Mbox: atencion.usuarios@inegi.org.mx 
+
+License: http://www.inegi.org.mx/inegi/terminos.html
+
+DataDictionary: https://www.inegi.org.mx/rnm/index.php/catalog/1151/data-dictionary
+
+Keyword: "persona presidenta municipal", "persona alcalde", "personas síndicas", "personas regidoras", "personas concejales", "personal", "sesiones de cabildo", "iniciativas", "instituciones", "personas titulares", "presupuesto ejercido", "vehículos", "equipo informático", "planeación y evaluación", "trámites", "programas o acciones de desarrollo social", "control interno", "anticorrupción", "participación ciudadana", "servicios públicos", "contrataciones públicas","tránsito", "vialidad", "catastro", "planeación y gestión territorial", "puestas a disposición", "presuntas faltas cívicas", "presuntos delitos", "aseguramientos", "operativos policiales", "protección civil", "juzgados cívicos"
+
+ContactPoint: Mtro. J. Armando Aguiar Rodríguez, 800 111 4634
+
+Temporal: 2024-01-01-2024-12-31
+
+Spatial: Estados Unidos Mexicanos
+
+AccrualPeriodicity: Bienalmente
+
+Distribution: https://www.inegi.org.mx/programas/cngmd/2025/

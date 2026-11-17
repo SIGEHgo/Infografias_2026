@@ -1,0 +1,12 @@
+COLUMNA,DESCRIPCION,ORIGEN,TIPO_DATO,LONGITUD,CODIGO_VALIDO
+cvegeo,Clave geoestadística concatenada,SECC I. 35,Carácter,5,01001 al 32058
+cve_ent,Clave del AGEE,SECC I. 35,Carácter,2,01 al 99
+cve_mun,Clave del AGEM,SECC I. 35,Carácter,3,001 al 999
+tipoinst_b,Institución de seguridad del ámbito federal,SECC I. 35,Numérico,1,1 al 9
+rnsnni1,Desempeño de funciones relacionadas con la seguridad pública del municipio por parte del personal de la institución de seguridad del ámbito federal,SECC I. 35,Numérico,2,0 al 98
+perioatt,Total,SECC I. 35,Carácter,20,"0-999999999999999, NA, NSS, ND, NP, NULL"
+perioa1,Menos de tres meses,SECC I. 35,Carácter,20,"0-999999999999999, NA, NSS, ND, NP, NULL"
+perioa2,De tres a menos de seis meses,SECC I. 35,Carácter,20,"0-999999999999999, NA, NSS, ND, NP, NULL"
+perioa3,De seis a menos de nueve meses,SECC I. 35,Carácter,20,"0-999999999999999, NA, NSS, ND, NP, NULL"
+perioa4,De nueve a doce meses,SECC I. 35,Carácter,20,"0-999999999999999, NA, NSS, ND, NP, NULL"
+perioa5,No identificado,SECC I. 35,Carácter,20,"0-999999999999999, NA, NSS, ND, NP, NULL"
