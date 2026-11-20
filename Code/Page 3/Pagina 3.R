@@ -123,4 +123,109 @@ personal_seguridad = personal_seguridad |>
 
 
 
+#### Puestas a disposicion de personas ####
+
+disposicion = "Inputs/Page 3/Puestas a disposicion/conjunto_de_datos_puesta_disposic_cngmd2025_csv/conjunto_de_datos/m3s2p1_cngmd2025.csv" |> 
+  read.csv()
+
+disposicion = disposicion |> 
+  dplyr::filter(cve_ent == 13)  |> 
+  dplyr::filter(aniorefe_d == 2)
+
+disposicion = disposicion |> 
+  dplyr::select(cvegeo, pudisptt, pudisp1, pudisp2) |> 
+  dplyr::rename(
+    CVEGEO = cvegeo,
+    `Puestas a disposicion total`= pudisptt,
+    `Puestas a disposicion ante la autoridad de justicia civica` = pudisp1,
+    `Puestas a disposicion ante el ministerio publico` = pudisp2
+  ) |> 
+  dplyr::mutate(CVEGEO = CVEGEO |>  as.numeric()) |> 
+  dplyr::arrange(CVEGEO) |> 
+  dplyr::mutate(CVEGEO = CVEGEO |>  as.character())
+
+#### Llamadas recibidas al 911 durante 2025 ####
+
+llamadas = "Inputs/Page 3/Llamadas 911/conjunto_de_datos_centro_aten_sist_telef_cngmd2025_csv/conjunto_de_datos/m3s1p145b_cngmd2025.csv" |> 
+  read.csv()
+
+llamadas = llamadas |> 
+  dplyr::filter(cve_ent == 13) |>
+  dplyr::mutate(cvegeo = cvegeo |>  as.numeric()) |> 
+  dplyr::arrange(cvegeo) |> 
+  dplyr::mutate(cvegeo = cvegeo |>  as.character())
+
+
+llamadas = llamadas |> 
+  dplyr::mutate(llamad1 = llamad1 |>  as.numeric()) |> 
+  dplyr::group_by(cvegeo)  |> 
+  dplyr::summarise(`Llamadas 911 procedentes`= llamad1 |>  sum(na.rm = T))
+
+
+#### Justicia ####
+
+justicia_dispocision = "Inputs/Page 3/Justicia/Infografías_nov_2026.xlsx" |> 
+  readxl::read_excel(sheet = 5)
+
+justicia_dispocision = justicia_dispocision |> 
+  dplyr::select(
+    `Clave INEGI`, 
+    `Procedimientos \r\nadministrativos`, 
+    `A disposición de la \r\npolicía municipal`,
+    `A disposición de la \r\npolicía estatal`,
+    `A disposición de la \r\nGuardia Nacional`
+  ) |> 
+  dplyr::mutate(`Clave INEGI` = `Clave INEGI` |>  as.numeric()) |> 
+  dplyr::arrange(`Clave INEGI`) |> 
+  dplyr::mutate(`Clave INEGI` = `Clave INEGI` |> as.character()) |> 
+  dplyr::rename(
+    `CVEGEO` = `Clave INEGI`,
+    `Procedimientos administrativos` = `Procedimientos \r\nadministrativos`,
+    `A disposición de la policía municipal` = `A disposición de la \r\npolicía municipal`,
+    `A disposición de la policía estatal` = `A disposición de la \r\npolicía estatal`,
+    `A disposición de la Guardia Nacional` = `A disposición de la \r\nGuardia Nacional`
+  )
+
+
+#### Recoleccion de residuos solidos ####
+
+residuos = "Inputs/Page 3/Residuos solidos urbanos/cngmd2025_resid_solid.xlsx" |> 
+  readxl::read_excel(sheet = 6) |> 
+  dplyr::select(dplyr::where(~ !all(is.na(.))))  #Borrar las columnas que son todo NA
+
+
+
+residuos |>  names() = paste(
+  residuos[4,] |>  
+    as.vector() |>  
+    zoo::na.locf(na.rm = T) |>  
+    unlist() |>  
+    as.character(),
+  residuos[5,]
+) |> 
+  gsub(pattern = "NA", replacement = "") |>
+  gsub(pattern = "\r\n|\r|\n", replacement = " ") |> 
+  stringr::str_squish()
+  
+  
+
+residuos = residuos |> 
+  dplyr::filter(CVE_ENT == "13") |> 
+  dplyr::select(CVEGEO, `Cantidad promedio diaria de residuos sólidos urbanos recolectados`:`Sistema de recolección Sistema de contenedores`) |> 
+  dplyr::mutate(CVEGEO = CVEGEO |>  as.numeric()) |> 
+  dplyr::arrange(CVEGEO) |> 
+  dplyr::mutate(CVEGEO = CVEGEO |> as.character()) |> 
+  dplyr::filter(CVEGEO != "13000")
+  
+
+
+
+
+  
+
+
+
+
+
+
 
