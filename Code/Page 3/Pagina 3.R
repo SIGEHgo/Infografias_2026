@@ -187,6 +187,76 @@ justicia_dispocision = justicia_dispocision |>
   )
 
 
+#### Medio ambiente ####
+
+#### Areas Naturales ####
+
+areas = "Inputs/Page 3/Areas naturales/Tablas_paginas_15_y_16_ROP_PCEANP_2026.xlsx" |> 
+  readxl::read_excel()
+
+areas |>  names() = areas[2,]
+
+areas = areas |> 
+  dplyr::filter(!is.na(`Categoría y Nombre`)) |> 
+  dplyr::slice(-1) |> 
+  dplyr::mutate(
+    `Categoría y Nombre` = `Categoría y Nombre` |> 
+      gsub(pattern = "^ZPE\\b", replacement = "Zona de Preservación Ecológica") |> 
+      gsub(pattern = "^REE\\b", replacement = "Reserva Ecológica Estatal") |>
+      gsub(pattern = "^PE\\b", replacement = "Parque Estatal") |>
+      stringr::str_squish()
+  )
+
+
+mun = "../../Importantes_documentos_usar/Municipios/municipiosjair.shp" |> 
+  sf::read_sf() |>  
+  sf::st_drop_geometry() |>  
+  dplyr::select(CVEGEO, NOM_MUN) |> 
+  dplyr::mutate(CVEGEO = CVEGEO |>  as.numeric()) |> 
+  dplyr::arrange(CVEGEO) |> 
+  dplyr::mutate(CVEGEO = CVEGEO |>  as.character())
+
+homologar_areas = fuzzyjoin::stringdist_join(
+    x = areas |>  dplyr::select(Municipio),
+    y = mun |>  dplyr::select(NOM_MUN, CVEGEO),
+    by = c("Municipio" = "NOM_MUN"),
+    mode = "left",
+    ignore_case = F,
+    method = "jw",
+    max_dist = 99,
+    distance_col = "distancia"
+  ) |> 
+  dplyr::group_by(Municipio) |> 
+  dplyr::slice_min(order_by = distancia, n = 1) |> 
+  unique() |> 
+  dplyr::ungroup()
+  
+
+homologar_areas = homologar_areas |> 
+  dplyr::mutate(CVEGEO = CVEGEO |>  as.numeric()) |> 
+  dplyr::arrange(CVEGEO) |> 
+  dplyr::mutate(CVEGEO = CVEGEO |>  as.character()) |> 
+  dplyr::select(-distancia)
+
+areas = areas |> 
+  dplyr::left_join(
+    y = homologar_areas,
+    by = "Municipio"
+  )
+
+areas = areas |> 
+  dplyr::select(CVEGEO, `Categoría y Nombre`, `Sup. (Ha)`) |> 
+  dplyr::mutate(`Sup. (Ha)` = `Sup. (Ha)` |>  as.numeric()) |> 
+  dplyr::rename(`Area natural protegida`= `Categoría y Nombre`) |> 
+  dplyr::group_by(CVEGEO) |> 
+  dplyr::summarise(
+    `Area natural protegida` = paste0(`Area natural protegida`, collapse = ", "),
+    `Superficie en Ha` = paste0(`Sup. (Ha)`, collapse = ", "),
+    `Numero de areas naturales protegidas` = dplyr::n(),
+    `Superficie en Ha total` = sum(`Sup. (Ha)`, na.rm = T)
+  )
+ 
+
 #### Recoleccion de residuos solidos ####
 
 residuos = "Inputs/Page 3/Residuos solidos urbanos/cngmd2025_resid_solid.xlsx" |> 
