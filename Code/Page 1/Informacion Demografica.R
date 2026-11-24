@@ -101,3 +101,58 @@ micro_eic_2025_h |> ###Usar nacimientos_2025
 ##### Tasa de fecundidad #####
 ### Fórmula:
 ### 1000* Num_nacimientos / tot_pob(solo mujeres en edad fertil) (por cada 1000 habitantes(mujeres))
+
+
+### Hoja 1 - Información Migratoria ----
+hoja_1[['info_migratoria']]=cartografia_13_mun_2025 |> 
+  dplyr::select(CVEGEO,NOMGEO) |> 
+  st_drop_geometry() |> 
+  dplyr::left_join(y = regiones |> dplyr::select(nom_mun,region) |> st_drop_geometry(),
+                   by=dplyr::join_by(NOMGEO==nom_mun))
+
+hoja_1[['info_migratoria']]=hoja_1[['info_migratoria']] |> 
+  dplyr::left_join(
+    micro_eic_2025_h |> 
+      dplyr::select(CVEGEO,ENT_PAIS_RES_5A,MUN_RES_5A,CAUSA_MIG_C,FACTOR) |> 
+      dplyr::group_by(CVEGEO,ENT_PAIS_RES_5A) |> 
+      dplyr::summarise(FACTOR=sum(FACTOR)) |> 
+      dplyr::collect() |> 
+      dplyr::mutate(CVEGEO=as.character(CVEGEO)) |> 
+      dplyr::ungroup() |> 
+      dplyr::filter(!is.na(ENT_PAIS_RES_5A) & (ENT_PAIS_RES_5A)!=13 & ENT_PAIS_RES_5A<900) |> 
+      dplyr::group_by(CVEGEO) |> 
+      dplyr::summarise(POB_NAC_OTRO_PAIS=sum(FACTOR,na.rm = T)),
+    by=dplyr::join_by(CVEGEO)
+  )
+hoja_1[['info_migratoria']]=hoja_1[['info_migratoria']] |> 
+  dplyr::left_join(
+    hoja_1[['info_geo']] |> dplyr::select(CVEGEO,POBTOT),
+    by=dplyr::join_by(CVEGEO)
+  ) |> 
+  dplyr::mutate(POBTOT=round(100*POB_NAC_OTRO_PAIS/POBTOT,5) ) |> 
+  dplyr::rename(PORC_POB_NAC_OTRO_PAIS=POBTOT)
+hoja_1[['info_migratoria']]=hoja_1[['info_migratoria']] |> 
+  dplyr::left_join(
+    micro_eic_2025_h |> 
+      dplyr::select(CVEGEO,ENT_PAIS_RES_5A,MUN_RES_5A,CAUSA_MIG_C,FACTOR) |> 
+      dplyr::group_by(CVEGEO,ENT_PAIS_RES_5A) |> 
+      dplyr::summarise(FACTOR=sum(FACTOR)) |> 
+      dplyr::collect() |> 
+      dplyr::mutate(CVEGEO=as.character(CVEGEO)) |> 
+      dplyr::ungroup() |> 
+      dplyr::filter(!is.na(ENT_PAIS_RES_5A) & 
+                      (ENT_PAIS_RES_5A)!=13 & 
+                      ENT_PAIS_RES_5A<900) |> 
+      dplyr::group_by(CVEGEO) |> 
+      dplyr::arrange(dplyr::desc(FACTOR)) |> 
+      dplyr::slice_head(n=3) |> dplyr::group_by(CVEGEO) |> 
+      dplyr::mutate(row_number=dplyr::row_number())|> 
+      dplyr::rename(VALOR=FACTOR) |> 
+      tidyr::pivot_wider(id_cols = CVEGEO,
+                         names_from = row_number,
+                         values_from = c(ENT_PAIS_RES_5A,VALOR),##Falta renombrar los códigos por el nombre de la entidad
+                         names_glue = "PRINCIPAL_ENTIDAD_{.name}"), 
+    by=dplyr::join_by(CVEGEO)
+  )
+
+
