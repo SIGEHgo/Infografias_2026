@@ -1,3 +1,6 @@
+
+# Agropecuario ------------------------------------------------------------
+
 pecuaria = "Inputs/Page 5/Cierre de la Producción Pecuaria 2025.csv" |> 
   read.csv()
 
@@ -37,6 +40,8 @@ pecuaria = pecuaria |>
     values_from = c(Volumen, Peso, Precio, Valor, Asacrificado),
     names_glue = "{Producto} { .value }"
   )
+
+#### Agricola ####
 
 
 agricola = "Inputs/Page 5/Cierre_agricola_mun_2025.csv" |> 
@@ -117,6 +122,7 @@ agricola = agricola |>
    )
 
 
+#### Agricultura a Cielo abierto ####
 
 cielo_abierto = "Inputs/Page 5/Cielo abierto.xlsx" |>  readxl::read_excel()
 
@@ -158,6 +164,8 @@ cielo_abierto = cielo_abierto |>
 
 
 
+#### Agricultura protegida ####
+
 protegida = "Inputs/Page 5/Agricultura protegida.xlsx" |>  
   readxl::read_excel()
 
@@ -190,6 +198,9 @@ protegida = protegida |>
   dplyr::select(-Municipio)
 
 
+
+
+#### Leche ####
 
 leche = "Inputs/Page 5/Leche bovino.xlsx" |>  
   readxl::read_excel()
@@ -227,6 +238,7 @@ leche = leche |>
   dplyr::select(CVEGEO, `Leche produccion`, `Leche valor de produccion`)
 
 
+#### Huevos ####
 
 huevos = "Inputs/Page 5/Huevo para plato.xlsx" |>  
   readxl::read_excel()
@@ -262,6 +274,11 @@ huevos = huevos |>
 
 
 
+
+
+
+#### Unidades de producción y número de viviendas con cría y explotación de animales ####
+
 explotacion = "Inputs/Page 5/Unidades y viviendas y explotacion.xlsx" |> 
   readxl::read_excel()
 
@@ -284,4 +301,159 @@ explotacion = explotacion |>
   )
 
 
-tidyr::pivo
+#### Unidades de produccion agricola activas ####
+
+produccion_agricola = "Inputs/Page 5/Unidades de produccion agricola.xlsx" |>  
+  readxl::read_excel()
+
+produccion_agricola = produccion_agricola |> 
+  dplyr::filter(`INEGI. Censo Agropecuario 2022` == "13 HGO")|> 
+  dplyr::filter(!is.na(...2))
+
+produccion_agricola = produccion_agricola |> 
+  dplyr::select(...2, ...4) |> 
+  dplyr::rename(
+    Municipio = ...2,
+    `Unidades de producción agropecuaria activas` = ...4
+  )
+
+
+mun = "../../Importantes_documentos_usar/Municipios/municipiosjair.shp" |> 
+  sf::read_sf() |> 
+  sf::st_drop_geometry()
+
+mun = mun |> 
+  dplyr::select(CVEGEO, NOM_MUN)
+
+
+produccion_agricola = produccion_agricola |> 
+  dplyr::left_join(
+    y = mun,
+    by = c("Municipio" = "NOM_MUN")
+  )
+
+produccion_agricola = produccion_agricola |> 
+  dplyr::select(CVEGEO, `Unidades de producción agropecuaria activas`)
+
+produccion_agricola = produccion_agricola |> 
+  dplyr::mutate(CVEGEO = CVEGEO |>  as.numeric()) |> 
+  dplyr::arrange(CVEGEO) |> 
+  dplyr::mutate(CVEGEO = CVEGEO |>  as.character())
+
+
+
+
+
+
+
+#### Hoteles y Moteles ####
+
+hoteles = "Inputs/Page 5/Hotele_Moteles.xlsx" |>  
+  readxl::read_excel()
+
+hoteles = hoteles |> 
+  dplyr::select(
+    dplyr::where(fn = ~ !all(is.na(.)))
+  )
+
+hoteles = hoteles |> 
+  dplyr::filter(
+    !is.na(...5) 
+  )
+
+hoteles = hoteles |> 
+  dplyr::select(-...4) 
+
+hoteles |>  names() = hoteles[1,] |> 
+  gsub(pattern = "-\r?\n[ \t]*", replacement = "") |> 
+  stringr::str_squish()
+
+
+
+hoteles = hoteles |> 
+  dplyr::slice(-c(1:2)) |> 
+  dplyr::left_join(
+    y = mun,
+    by = c("Municipio" = "NOM_MUN")
+      )
+
+
+
+all((hoteles$CVEGEO |>  is.na()) == F)
+
+hoteles = hoteles |> 
+  dplyr::mutate(CVEGEO = CVEGEO |>  as.numeric()) |> 
+  dplyr::arrange(CVEGEO) |> 
+  dplyr::mutate(CVEGEO = CVEGEO |>  as.character()) |> 
+  dplyr::relocate(CVEGEO, .before = Municipio) |> 
+  dplyr::select(-Municipio, -Total)
+
+#### Restaurantes ####
+
+restaurantes = "Inputs/Page 5/Bares.xlsx" |> 
+  readxl::read_excel()
+
+restaurantes = restaurantes |> 
+  dplyr::select(
+    dplyr::where(fn = ~ !all(is.na(.)))
+  ) |> 
+  dplyr::filter(!is.na(...5)) |> 
+  dplyr::select(-c(...2, ...4))
+
+restaurantes |>  names() = restaurantes[1,] |> 
+  gsub(pattern = "-\r?\n[ \t]*", replacement = "") |> 
+  gsub(pattern = "\r?\n[ \t]*", replacement = "") |> 
+  stringr::str_squish()
+
+restaurantes = restaurantes |> 
+  dplyr::slice(-c(1:2)) |> 
+  dplyr::select(-`a/`, -`b/`, -Total) 
+
+restaurantes = restaurantes |> 
+  dplyr::left_join(
+    y = mun,
+    by = c("Municipio" = "NOM_MUN")
+  ) |> 
+  dplyr::relocate(CVEGEO, .before = Municipio)
+
+
+all((restaurantes$CVEGEO |>  is.na()) == F)
+
+#### Cultura ####
+
+bibliotecas = "Inputs/Page 5/Cultura bibliotecas.xlsx" |> 
+  readxl::read_excel()
+
+bibliotecas = bibliotecas |> 
+  dplyr::filter(!is.na(...5)) |> 
+  dplyr::select(`Bibliotecas públicas, personal ocupado, títulos, libros en existencia, consultas realizadas y usuarios por municipio`,
+                ...5)
+
+bibliotecas |>  names() = bibliotecas[1, ] |>  
+  gsub(pattern = "-\r\n", replacement = "") |>  
+  stringr::str_squish() 
+
+bibliotecas = bibliotecas |> 
+  dplyr::slice(-c(1:2))
+
+
+mun = "../../Importantes_documentos_usar/Municipios/municipiosjair.shp" |> 
+  sf::read_sf() |>  
+  sf::st_drop_geometry() |>  
+  dplyr::select(CVEGEO, NOM_MUN)
+
+
+bibliotecas = bibliotecas |> 
+  dplyr::left_join(
+    y = mun,
+    by = c("Municipio" = "NOM_MUN")
+  ) |> 
+  dplyr::relocate(CVEGEO, .before = Municipio)
+
+
+
+
+
+
+
+
